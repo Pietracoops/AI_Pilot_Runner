@@ -1,0 +1,207 @@
+# This is a comment
+sim/cockpit2/engine/actuators/throttle_beta_rev_ratio[0];10
+sim/cockpit2/engine/actuators/throttle_beta_rev_ratio[1];10
+sim/joystick/yoke_heading_ratio;10
+sim/joystick/yoke_pitch_ratio;10
+sim/joystick/yoke_roll_ratio;10
+a320/Aircraft/Cockpit/Pedestal/EngineLeverActive1;10
+a320/Aircraft/Cockpit/Pedestal/EngineLever1;10
+sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all;10
+a320/Aircraft/Cockpit/Panel/RudderPedals;10
+a320/Aircraft/Cockpit/Panel/SidestickLatR;10
+a320/Aircraft/Cockpit/Panel/SidestickLonR;10
+a320/Aircraft/Cockpit/Panel/SidestickLatL;10
+a320/Aircraft/Cockpit/Panel/SidestickLonL;10
+a320/Aircraft/Control/ELAC1/Pitch;10
+sim/flightmodel/position/Q;10
+a320/Aircraft/Control/ELAC1/Roll;10
+a320/Aircraft/Heading;10
+sim/flightmodel/position/indicated_airspeed2;10
+a320/Aircraft/FMGS/FMGC1/FlightDirPitch;10
+sim/cockpit2/gauges/indicators/altitude_ft_pilot;10
+#sim/aircraft/view/acf_descrip[0][40];10
+#sim/cockpit2/switches/landing_lights_on;10
+#sim/cockpit2/engine/actuators/throttle_ratio[0];100
+#ipcl/reference_model/variable1;0
+#ipcl/deviation_model/value1;0
+#ipcl/deviation_model/value2;0
+## Turn external power on
+#a320/Overhead/ElecExt;10
+## Start APU masterswitch 
+#a320/Overhead/APU_Master;10
+## flood lights
+#a320/Pedestal/LightFlood1;10
+#a320/Pedestal/LightFlood2;10
+## integrity lights
+#a320/Pedestal/LightInteg;10
+## overhead integrity lights
+#a320/Overhead/LightOverhead;10
+## bright dome
+#a320/Overhead/LightDome;
+## crew supply light
+#a320/Overhead/OxygenCrewSupply;10
+## IRS switches: set to NAV
+#a320/Overhead/CDU_Mode1
+#a320/Overhead/CDU_Mode2
+#a320/Overhead/CDU_Mode3
+## Turn both batteries on
+#a320/Overhead/ElecBat1;1
+#a320/Overhead/ElecBat2;1
+## seatbelts on
+#a320/Overhead/LightBelts;1
+## set no smoking to auto
+#a320/Overhead/LightSmoke;1
+## Emergency exit light to lights on
+#a320/Overhead/LightEmerMode;1
+## Landing elevation to auto
+#a320/Overhead/PressElevation;1
+## APU bleed on
+#a320/Overhead/AirBleedAux;1
+## Switch on start switch
+#a320/Overhead/APU_Start;
+## Test battery: shut off batteries then restart them
+#a320/Overhead/ElecBat1;1
+#a320/Overhead/ElecBat2;1
+## Turn on fuel pumps/set to automatic,
+#a320/Overhead/FuelPump1;1
+#a320/Overhead/FuelPump2;1
+#a320/Overhead/FuelPump3;1
+#a320/Overhead/FuelPump4;1
+#a320/Overhead/FuelPump5;1
+#a320/Overhead/FuelPump6;1
+## Engine fire tests for both engines
+#a320/Overhead/FireEngine1_Test;1
+#a320/Overhead/FireEngine2_Test;1
+## APU fire test 
+#a320/Overhead/FireAPU_Test
+## Pull artificial horizon knob
+#a320/Panel/InstBaroMode;
+## Check that anti skid is on
+#a320/Panel/BreakASkid;1
+## Set each MCDU to transmit on interphone
+#a320/ACP1/Recv6;1
+#a320/ACP2/Recv6;1
+## Set each MCDU to transmit on public address
+#a320/ACP1/Recv8;1
+#a320/ACP2/Recv8;1
+## Check that 4 switchings are in their normal positions
+#a320/Pedestal/SelectIR;1
+#a320/Pedestal/SelectADR;1
+#a320/Pedestal/SelectDMC;1
+#a320/Pedestal/SelectXFR;1
+## Set left MCDU to VHF1 freq
+#a320/RMP1/COM1;1
+## Rudder trim reset/ensure it's showing 0.0
+#a320/Pedestal/RudderTrimmReset;
+## Arm speed brake
+#sim/cockpit2/controls/speedbrake_ratio;1
+## Set flaps position accordingly
+#sim/cockpit2/controls/flaps_ratio;1
+## Set right MCDU to VHF2 freq
+#a320/RMP2/COM2;1
+#a320/RMP2/COM2;1
+## (Traffic collision avoidance system) Check both selectors are on their standby positions
+#a320/Pedestal/RudderTrimmReset;1
+#a320/Pedestal/TCAS_Traffic;1
+## (Left side) Check that flight director (FD) is on
+#a320/Panel/EFIS_FlightDirL;1
+## (Left side) Constraints (CSTR) are on
+#a320/Panel/EFIS_NavType1L;1
+## (Right side) Check that flight director (FD) is on
+#a320/Panel/EFIS_FlightDirR;1
+## (Right side) Constraints (CSTR) are on
+#a320/Panel/EFIS_NavType1R;1
+## Set beacon light to on
+#a320/Overhead/LightBeacon;
+## Set engine mode selector to start
+#a320/Pedestal/EngineMode;1
+## Start engines
+#a320/Pedestal/EngineMaster2;1
+#a320/Pedestal/EngineMaster1;1
+## Other lights: nose light,
+#a320/Overhead/LightNose;1
+## Other lights: nav & logo
+#a320/Overhead/LightLogo;1
+## Other lights: right landing light,
+#a320/Overhead/LightLandR;
+## Other lights: left landing light
+#a320/Overhead/LightLandL;1
+## Other lights: wing lights
+#a320/Overhead/LightWing;1
+## Other lights: turn lights
+#a320/Overhead/LightTurn;1
+## Other lights: strobe lights
+#a320/Overhead/LightStrobe;1
+## Set flaps
+#sim/flightmodel/controls/flaprqst;1
+## Push throttle forward
+#sim/cockpit2/engine/actuators/throttle_beta_rev_ratio_all;10
+## MCDU
+## Alphabetical order downwards starting with A
+#a320/MCDU1/Key1;1
+#a320/MCDU1/Key2;1
+#a320/MCDU1/Key3;1
+#a320/MCDU1/Key4;1
+#a320/MCDU1/Key5;1
+#a320/MCDU1/Key6;1
+#a320/MCDU1/Key7;1
+#a320/MCDU1/Key8;1
+#a320/MCDU1/Key9;1
+#a320/MCDU1/Key10;1
+#a320/MCDU1/Key11;1
+#a320/MCDU1/Key12;1
+#a320/MCDU1/Key13;1
+#a320/MCDU1/Key14;1
+#a320/MCDU1/Key15;1
+#a320/MCDU1/Key16;1
+#a320/MCDU1/Key17;1
+#a320/MCDU1/Key18;1
+#a320/MCDU1/Key19;1
+#a320/MCDU1/Key20;1
+#a320/MCDU1/Key21;1
+#a320/MCDU1/Key22;1
+#a320/MCDU1/Key23;1
+#a320/MCDU1/Key24;1
+#a320/MCDU1/Key25;1
+#a320/MCDU1/Key26;1
+#a320/MCDU1/Key27;1
+## Numbers starting at 1
+#a320/MCDU1/Num1;1
+#a320/MCDU1/Num2;1
+#a320/MCDU1/Num3;1
+#a320/MCDU1/Num4;1
+#a320/MCDU1/Num5;1
+#a320/MCDU1/Num6;1
+#a320/MCDU1/Num7;1
+#a320/MCDU1/Num8;1
+#a320/MCDU1/Num9;1
+#a320/MCDU1/Num11;1
+## Lines
+a320/MCDU1/Line1;1
+a320/MCDU1/Line2;1
+a320/MCDU1/Line3;1
+a320/MCDU1/Line4;1
+a320/MCDU1/Line5;1
+a320/MCDU1/Line6;1
+a320/MCDU1/Line7;1
+a320/MCDU1/Line8;1
+a320/MCDU1/Line9;1
+a320/MCDU1/Line10;1
+a320/MCDU1/Line11;1
+a320/MCDU1/Line12;1
+a320/MCDU1/Page1;1
+a320/MCDU1/Page2;1
+a320/MCDU1/Page3;1
+a320/MCDU1/Page4;1
+a320/MCDU1/Page5;1
+a320/MCDU1/Page6;1
+a320/MCDU1/Page7;1
+a320/MCDU1/Page8;1
+a320/MCDU1/Page9;1
+a320/MCDU1/Page10;1
+a320/MCDU1/Page11;1
+a320/MCDU1/Page12;1
+a320/MCDU1/Page13;1
+a320/MCDU1/Page14;1
+a320/MCDU1/Page15;1
+a320/MCDU1/Page16;1

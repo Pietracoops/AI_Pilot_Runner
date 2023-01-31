@@ -91,8 +91,6 @@ action_ont2xplane_dict = {
                'Engine2Failure': 'sim/operation/failures/rel_engfai2',# this might not be accurate # ok
                'LandingGearPosition':'sim/aircraft/prop/acf_prop_gear_rat', # ok
                'Airspeed':'sim/flightmodel/position/indicated_airspeed', # ok
-               #'LeftThrustLever':'StandardAircraft/Engine1ThrustLeverAngle', # This should be Engine1ThrustLever # ok
-               #'RightThrustLever':'StandardAircraft/Engine2ThrustLeverAngle', # This should be Engine2ThrustLever # ok
                'LeftThrustLever':'sim/cockpit2/engine/actuators/throttle_ratio', # This should be Engine1ThrustLever # ok
                'RightThrustLever':'sim/cockpit2/engine/actuators/throttle_ratio', # This should be Engine2ThrustLever # ok
                'TimeInterval': 'None_11', # What is this! # ok
@@ -109,9 +107,9 @@ action_ont2xplane_dict = {
 
 action_xplane2ont_dict = {}
 
-def load_ontologies(path):
-    onto_domain = get_ontology(str(path / "omain.owl")).load()
-    onto_task = get_ontology(str(path / "task.owl")).load()
+def load_ontologies(path, domain_ont_name, task_ont_name):
+    onto_domain = get_ontology(str(path / domain_ont_name)).load()
+    onto_task = get_ontology(str(path / task_ont_name)).load()
     print('Domain ontology loaded : ', onto_domain)
     print('Task ontology loaded : ', onto_task)
     return onto_domain, onto_task

@@ -1,3 +1,16 @@
+import os
+import signal
+import subprocess
+
+
+class ProcessManager: 
+
+    def __init__(self, name, path): 
+        self.process = subprocess.Popen(name, creationflags=subprocess.CREATE_NEW_CONSOLE, close_fds=False, cwd=str(path))
+
+    def __del__(self):
+        self.process.kill()
+
 
 def duplicate_removal(seq):
     seen = set()

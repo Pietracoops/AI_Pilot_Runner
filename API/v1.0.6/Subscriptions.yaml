@@ -1,0 +1,160 @@
+Aircraft_Description:
+    tag: "sim/aircraft/view/acf_descrip[0][40]"
+    frequency: 10
+    description: "EMPTY"
+ipcl:
+    tag: "ipcl/deviation_model/value1"
+    frequency: 0
+    description: "EMPTY"
+ipc2:
+    tag: "ipcl/deviation_model/value2"
+    frequency: 0
+    description: "EMPTY"
+SideStickPositionX:
+    tag: "a320/Panel/SidestickTakeoverL_button"
+    frequency: 10
+    description: ""
+SideStickPositionY:
+    tag: "a320/Panel/SidestickTakeoverR_button"
+    frequency: 10
+    description: ""
+Engine1FireSwitch:
+    tag: "a320/Overhead/FireEngine1_button"
+    frequency: 1
+    description: ""
+Engine2FireSwitch:
+    tag: "a320/Overhead/FireEngine2_button"
+    frequency: 1
+    description: ""
+Engine2MasterSwitchPosition:
+    tag: "a320/Pedestal/EngineMaster2_switch+"
+    frequency: 1
+    description: ""
+Engine1MasterSwitchPosition:
+    tag: "a320/Pedestal/EngineMaster1_switch+"
+    frequency: 1
+    description: ""
+EGT:
+    tag: "sim/aircraft/engine/acf_EGT_is_C"
+    frequency: 1
+    description: ""
+AutoThrustMode:
+    tag: "a320/Panel/FCU_AutoThrust_button"
+    frequency: 1
+    description: ""
+AutoPilotMasterSwitch:
+    tag: "a320/Panel/FCU_AutoPilot1_button"
+    frequency: 1
+    description: ""
+Agent2Switch:
+    tag: "a320/Overhead/FireEngine1_Agent2_button"
+    frequency: 1
+    description: ""
+Agent1Switch:
+    tag: "a320/Overhead/FireEngine1_Agent1_button"
+    frequency: 1
+    description: ""
+ParkBrakePosition:
+    tag: "sim/flightmodel/controls/parkbrake"
+    frequency: 1
+    description: ""
+SpeedBrakeLeverPosition:
+    tag: "a320/Panel/BrakeAuto1_button"
+    frequency: 1
+    description: ""
+BrakeLeft:
+    tag: "sim/cockpit2/controls/left_brake_ratio"
+    frequency: 1
+    description: ""
+BrakeRight:
+    tag: "sim/cockpit2/controls/left_brake_ratio"
+    frequency: 1
+    description: ""
+LandingGearLeverPosition:
+    tag: "sim/cockpit2/controls/gear_handle_down"
+    frequency: 1
+    description: ""
+Speed:
+    tag: "sim/flightmodel/position/indicated_airspeed"
+    frequency: 10
+    description: ""
+VSIIndication:
+    tag: "sim/cockpit/autopilot/vertical_velocity"
+    frequency: 10
+    description: ""
+RadioAltitude:
+    tag: "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot"
+    frequency: 10
+    description: ""
+TCASMode:
+    tag: "sim/cockpit2/EFIS/EFIS_tcas_on"
+    frequency: 10
+    description: ""
+trimDirection:
+    tag: "sim/flightmodel2/controls/rudder_trim"
+    frequency: 10
+    description: ""
+MasterSwitchWarningSwitchPress:
+    tag: "sim/cockpit/warnings/annunciator_test_pressed"
+    frequency: 10
+    description: ""
+RadioTransmitting:
+    tag: "sim/atc/user_aircraft_transmitting"
+    frequency: 10
+    description: ""
+TailWind:
+    tag: "sim/weather/wind_speed_kt[0]"
+    frequency: 10
+    description: ""
+CrossWind:
+    tag: "sim/weather/wind_speed_kt[1]"
+    frequency: 10
+    description: ""
+Engine1Failure:
+    tag: "sim/operation/failures/rel_engfai1"
+    frequency: 10
+    description: ""
+Engine2Failure:
+    tag: "sim/operation/failures/rel_engfai2"
+    frequency: 10
+    description: ""
+LandingGearPosition:
+    tag: "sim/aircraft/prop/acf_prop_gear_rat"
+    frequency: 10
+    description: ""
+Airspeed:
+    tag: "sim/flightmodel/position/indicated_airspeed"
+    frequency: 10
+    description: ""
+LeftThrustLever:
+    tag: "sim/cockpit2/engine/actuators/throttle_ratio[0]"
+    frequency: 10
+    description: ""
+RightThrustLever:
+    tag: "sim/cockpit2/engine/actuators/throttle_ratio[1]"
+    frequency: 10
+    description: ""
+FMSDirection:
+    tag: "sim/cockpit/gyros/psi_ind_degm3"
+    frequency: 10
+    description: ""
+Altitude:
+    tag: "sim/flightmodel/misc/h_ind"
+    frequency: 10
+    description: ""
+FlapLever:
+    tag: "sim/multiplayer/controls/flap_request"
+    frequency: 10
+    description: ""
+TCASAlert:
+    tag: "sim/cockpit2/tcas/indicators/tcas_alert"
+    frequency: 10
+    description: ""
+Pitch:
+    tag: "sim/cockpit/gyros/the_vac_ind_deg"
+    frequency: 10
+    description: ""
+WindShearWarning:
+    tag: "sim/cockpit2/annunciators/windshear_warning"
+    frequency: 10
+    description: ""
