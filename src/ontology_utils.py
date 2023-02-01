@@ -292,6 +292,263 @@ def find_tasks_with_constraint(onto_task, type, pre_task_value):
     return values
 
 
+class TaskObj:
+    def __init__(self):
+        self.id = None
+        self.name = None
+        self.number_of_actions = None
+        self.number_of_constraints = None
+        self.super_tasks = {}
+        self.sub_tasks = {}
+        self.constraints = {}
+        self.actions = {}
+        self.pre_condition = {}
+
+class ConstraintObj:
+    def __init__(self):
+        self.id = None
+        self.type = None
+        self.constr_eval_criteria = {}
+        self.task_eval_criteria = {}
+
+class ActionObj:
+    def __init__(self):
+        self.id = None
+        self.type = None
+        self.eval_criteria = {}
+
+class EvalCriteriaObj:
+    def __init__(self):
+        self.name = None
+        self.exact_value = None
+        self.min_value = None
+        self.max_value = None
+
+class ActionObj:
+    def __init__(self):
+        self.id = None
+        self.name = None
+        self.parameters = None
+        self.exact_value = None
+        self.min_value = None
+        self.max_value = None
+        self.comment = None
+
+
+class OntoObj:
+    def __init__(self, task_list):
+        self.task_list = task_list
+        self.forward_condition_task_list = {}  # Contains key:task, value:next task
+        self.backward_condition_task_list = {} # Contains key:task, value:precondition task
+        self.event_list = {}                   # Contains key:event, value:start task for event chain
+
+        OntoObj.convert_task_constraints_to_preconditions(self)
+        OntoObj.decompose_task_list(self)
+        OntoObj.get_events_task_list(self)
+
+        print("done")
+
+    def decompose_task_list(self):
+        # Build forward condition task
+        for task, task_obj in self.task_list.items():
+            if len(list(task_obj.pre_condition.keys())) != 0:
+                self.backward_condition_task_list[task] = list(task_obj.pre_condition.keys())
+            for precondition, precon_value in task_obj.pre_condition.items():
+                if not precondition in self.forward_condition_task_list.keys():
+                    tmp_array = [task]
+                    self.forward_condition_task_list[precondition] = tmp_array
+                else:
+                    tmp_array = self.forward_condition_task_list[precondition]
+                    tmp_array.append(task)
+                    self.forward_condition_task_list[precondition] = tmp_array.copy()
+
+    def get_events_task_list(self):
+        for task, task_obj in self.task_list.items():
+            if isinstance(task, str):
+                self.event_list[task] = OntoObj.get_start_of_chain(self, task)
+
+
+    def get_start_of_chain(self, task):
+        cyclic_dict = {} # Use this to avoid cycles
+        if isinstance(task, str):
+            current_task = task
+        else:
+            current_task = task
+        while(True):
+            cyclic_dict[current_task] = 1
+            if current_task in self.backward_condition_task_list:
+                previous_task = current_task
+                current_task = self.backward_condition_task_list[current_task]
+            else:
+                return current_task
+
+            if isinstance(current_task, list) and len(current_task) != 0:
+                current_task = current_task[0]
+
+            if current_task in cyclic_dict:
+                return previous_task
+
+    def convert_task_constraints_to_preconditions(self):
+        for task_id, task_obj in self.task_list.items():
+            for constraint_id, constraint_obj in task_obj.constraints.items():
+                if len(list(constraint_obj.task_eval_criteria.keys())) != 0:
+                    for key in constraint_obj.task_eval_criteria.keys():
+                        task_obj.pre_condition[key] = 1
+                    self.task_list[task_id] = task_obj # Update the object
+
+
+def build_ontology_hierarchy(onto_task):
+    print("Building Ontology Hierarchy: Started...")
+    start = time.time()
+    all_tasks = find_all_tasks(onto_task, onto_task.Task) # Get all Tasks in ontology
+    #all_actions = find_all_tasks(onto_task, onto_task.Action) # Get all Actions in ontology
+
+    tasks_dict = {}
+    for task in all_tasks: # Loop through all tasks
+        task_obj = get_task_object(task, onto_task)
+        if task_obj != None:
+            tasks_dict[task_obj.id] = task_obj
+
+    onto_obj = OntoObj(tasks_dict)
+    end = time.time()
+    print(f"Building Ontology Hierarchy: Complete : {end - start} seconds")
+    return onto_obj
+def get_task_object(task, onto_task):
+
+    # if task.name =="1003":
+    #     print("hello")
+
+    if task.name == "Task" or not hasattr(task,'hasConstraint'):
+        return None # Return, we dont want to process these
+
+    task_obj = TaskObj() # Create the empty task object
+    if len(task.hasTaskID) != 0:
+        task_obj.id = task.hasTaskID[0]
+    else:
+        task_obj.id = task.name
+
+    if len(task.hasNbAction) != 0:
+        task_obj.number_of_actions = task.hasNbAction[0]
+    if len(task.hasNbConstraint) != 0:
+        task_obj.number_of_constraints = task.hasNbConstraint[0]
+
+    subtask = task.hasSubtask
+    subtask_dict = {}
+    for _task in subtask:
+        subtask_dict[_task.hasTaskID[0]] = 1
+
+    supertask = task.hasSuperTask
+    supertask_dict = {}
+    for _task in supertask:
+        supertask_dict[_task.name] = 1
+
+    precond = task.hasPreCondition
+    precond_dict = {}
+    for _task in precond:
+        if len(_task.hasTaskID) != 0:
+            precond_dict[_task.hasTaskID[0]] = 1
+        elif len(_task.hasConstraintID) != 0:
+            precond_dict[_task.hasConstraintID[0]] = 1
+
+
+    task_obj.sub_tasks = subtask_dict
+    task_obj.super_tasks = supertask_dict
+    task_obj.pre_condition = precond_dict
+
+    task_obj.actions = get_task_actions(task, onto_task)
+    task_obj.constraints = get_task_constraints(task, onto_task)
+
+    return task_obj
+
+
+def get_task_actions(task, onto_task):
+    actions_dict = {}
+
+    actions = task.hasAction
+
+    if len(task.hasAction) == 0:
+        return actions_dict
+
+    for action in actions:
+        action_obj = ActionObj()
+        if len(action.hasActionID) != 0:
+            action_obj.id = action.hasActionID[0]
+        if len(action.hasActionValue) != 0:
+            action_obj.exact_value = action.hasActionValue[0]
+        if len(action.comment) != 0:
+            action_obj.comment = action.comment[0]
+
+        action_params = action.hasActionParameter
+        for param in action_params:
+            action_obj.parameters = param.name
+
+        actions_dict[action_obj.id] = action_obj
+
+    return actions_dict
+
+def get_task_constraints(task, onto_task):
+
+    constraints_dict = {}
+    constraints = task.hasConstraint
+
+    if len(task.hasConstraint) == 0:
+        return constraints_dict
+
+    for constraint in constraints:
+        # Create Objects
+        eval_dict = {}
+        task_dict = {}
+        # if constraint.is_a[0] == onto_task.Constraint:
+        #     constraint_obj = ConstraintObj(constraint.hasConstraintID[0], constraint.hasConstraintType[0])
+        if constraint.is_a[0] == onto_task.Task:
+            task_obj = get_task_object(constraint, onto_task)
+            task_dict[task_obj.id] = task_obj
+            continue
+
+        constraint_obj = ConstraintObj()
+        if len(constraint.hasConstraintID) != 0:
+            constraint_obj.id = constraint.hasConstraintID[0]
+        if len(constraint.hasConstraintType) != 0:
+            constraint_obj.type = constraint.hasConstraintType[0]
+
+        # Find the Evaluation criteria list
+        constraint_eval = constraint.hasEvaluationCriteria
+
+        # Loop through each evaluation Criteria
+        sub_constraints_dict = {}
+        for eval in constraint_eval:
+
+            if eval.is_a[0] != onto_task.Constraint and eval.is_a[0] != onto_task.Task:
+                eval_constraint_obj = EvalCriteriaObj()
+
+                if len(constraint.hasMinValue) != 0 and len(constraint.hasMaxValue) != 0:
+                    eval_constraint_obj.min_value = constraint.hasMinValue[0]
+                    eval_constraint_obj.max_value = constraint.hasMaxValue[0]
+                elif len(constraint.hasMinValue) != 0 and len(constraint.hasMaxValue) == 0:
+                    eval_constraint_obj.min_value = constraint.hasMinValue[0]
+                elif len(constraint.hasExactValue) != 0:
+                    eval_constraint_obj.exact_value = constraint.hasExactValue[0]
+
+                eval_constraint_obj.name = eval.name
+                eval_dict[eval_constraint_obj.name] = eval_constraint_obj # Add it to the dict
+
+            # constraint could also be a list of tasks, if so we need to recursively call this function
+            if eval.is_a[0] == onto_task.Task:
+                task_dict[eval.hasTaskID[0]] = 1
+
+            if eval.is_a[0] == onto_task.Constraint:
+                tmp_constraints_dict = get_task_constraints(eval, onto_task)
+                sub_constraints_dict = {**sub_constraints_dict, **tmp_constraints_dict} # Merge both dicts together
+
+        constraint_obj.constr_eval_criteria = eval_dict
+        constraint_obj.task_eval_criteria = task_dict
+        constraints_dict[constraint_obj.id] = constraint_obj
+
+        constraints_dict = {**constraints_dict, **sub_constraints_dict} # Merge both dicts together
+
+    return constraints_dict
+
+
 def get_task_validation(task, current_data_list, all_task_validation_dict, all_constraint_validation_dict, onto_task):
     # Get list of all constraints for next task
     constraints_evaluated_dict = {}
@@ -409,8 +666,6 @@ def check_eval_valid(eval, constraint, constraints_evaluated_dict, all_constrain
     else:
         params_evaluated_dict[constraint_eval_name + "_" + constraint.name] = get_constraint_min_max_exact_values(constraint)
         return result, params_evaluated_dict, labels_missing
-
-
 
 
 def check_task_valid(validation_dict):

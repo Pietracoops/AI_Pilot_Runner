@@ -6,17 +6,20 @@ import yaml
 import time
 
 class Runner:
-    nanos_to_sec = (10 ** 9)
+    nanos_to_sec = (10 ** -9)
     def __init__(self, path_to_ont, ont_names, path_to_yaml, api_client, frequency, verbosity):
         self.sim_env_dict = {}
         self.runner_stats_dict = {}
         self.client = api_client
         self.runner_frequency = 1/ frequency # Input received in hertz
         self.verbosity = verbosity
+        self.ont_extracted = None
 
         Runner.extract_yaml_objs(self, path_to_yaml)
         print("Runner Initialized")
         onto_domain, onto_task = ontology_utils.load_ontologies(path_to_ont, ont_names[0], ont_names[1]) # Load the ontologies
+        self.onto_domain = onto_domain
+        self.onto_task = onto_task
         # cae_log_utils.generate_cae_log_dictionaries() # To generate the inverted ont2cae table
         # task_sequence, action_sequence = ontology_utils.get_task_chain_tasks(onto_task, onto_domain)
 
@@ -56,12 +59,15 @@ class Runner:
         # By doing it this way, we can achieve a 0.001 second accuracy (vs the 0.16 second time.sleep accuracy)
         while(True):
             # Check current time
-            current_time_sec = time.time_ns() / Runner.nanos_to_sec
+            current_time_sec = time.time_ns() * Runner.nanos_to_sec
             if current_time_sec > next_iter_time:
                 break
 
+    def build_ontology_hierarchy(self):
+        self.ont_extracted = ontology_utils.build_ontology_hierarchy(self.onto_task)
+
     def run_simulation_loop(self):
-        start_time_sec = time.time_ns() / Runner.nanos_to_sec
+        start_time_sec = time.time_ns() * Runner.nanos_to_sec
         next_iter_time = start_time_sec + self.runner_frequency
         self.runner_stats_dict["runner_heartbeat"] = 0
         while(True):
@@ -69,7 +75,7 @@ class Runner:
             if self.runner_stats_dict["runner_heartbeat"] % 100 == 0:
                 Runner.display_runner_stats_dict(self)
 
-            current_time = time.time_ns() / Runner.nanos_to_sec
+            current_time = time.time_ns() * Runner.nanos_to_sec
             self.runner_stats_dict["runner_heartbeat"] += 1
             self.runner_stats_dict["running_time"] = next_iter_time - start_time_sec
 
@@ -78,7 +84,7 @@ class Runner:
 
 
             # ============== Stop Runner Work ================
-            end_time_sec = time.time_ns() / Runner.nanos_to_sec
+            end_time_sec = time.time_ns() * Runner.nanos_to_sec
             self.runner_stats_dict["last_loop_work_time"] = end_time_sec - current_time
 
             if Runner.check_workframe_percentage(self, current_time, start_time_sec, end_time_sec, next_iter_time) > 100.0:

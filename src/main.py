@@ -47,12 +47,13 @@ if not api_client.connect():
 
 
 sim_runner = runner.Runner(ONT_DIR, ONTOLOGY_NAMES, sim_yaml_path, api_client, 10, 0)
+sim_runner.build_ontology_hierarchy()
 
 
 sim_runner.run_simulation_loop()
 
 
-# list_of_actions = superclass.
+
 
 
 print("Terminated.")
