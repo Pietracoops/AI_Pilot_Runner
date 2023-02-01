@@ -303,6 +303,46 @@ class TaskObj:
         self.constraints = {}
         self.actions = {}
         self.pre_condition = {}
+    
+    def validate_eval_criteria(self, environment_dict):
+        validation_dict = {}
+        eval_criteria_dict = {}
+        for constraint, constraint_obj in self.constraints.items():
+            for eval, eval_obj in constraint_obj.constr_eval_criteria.items():
+                eval_criteria_dict[eval_obj.name] = [eval_obj.exact_value, eval_obj.min_value, eval_obj.max_value]
+
+        for name, value_array in eval_criteria_dict.items():
+            environment_value = environment_dict[name]
+            validation_dict[name] = False # initialize to false
+            # Validate all 3 values in value_array [exact value, min, max]
+            if value_array[0] != None and float(environment_value[0]) == value_array[0]:
+                validation_dict[name] = True
+                continue
+            elif value_array[1] != None and float(environment_value[0]) >= value_array[1]:
+                validation_dict[name] = True
+            if value_array[2] != None and float(environment_value[0]) <= value_array[2]:
+                validation_dict[name] = True
+        
+        for value in validation_dict.values():
+            if not value:
+                return False
+
+        return True
+
+    def validate_action_criteria(self, environment_dict):
+        validation_dict = {}
+        for action, action_obj in self.actions.items():
+            action_value = action_obj.exact_value
+            action_parameter = action_obj.parameters
+            if environment_dict[action_parameter] == action_value:
+                validation_dict[action_parameter] = True
+                
+        for value in validation_dict.values():
+            if not value:
+                return False
+        
+        return True
+
 
 class ConstraintObj:
     def __init__(self):
@@ -341,12 +381,16 @@ class OntoObj:
         self.forward_condition_task_list = {}  # Contains key:task, value:next task
         self.backward_condition_task_list = {} # Contains key:task, value:precondition task
         self.event_list = {}                   # Contains key:event, value:start task for event chain
+        self.action_exclusion_list = []          
 
         OntoObj.convert_task_constraints_to_preconditions(self)
         OntoObj.decompose_task_list(self)
         OntoObj.get_events_task_list(self)
+        OntoObj.create_action_exclusion_list(self)
 
-        print("done")
+    def create_action_exclusion_list(self):
+        self.action_exclusion_list.append("VerballyAnnounce")
+        self.action_exclusion_list.append("TimeInterval")
 
     def decompose_task_list(self):
         # Build forward condition task
