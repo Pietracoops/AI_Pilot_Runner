@@ -46,8 +46,9 @@ if not api_client.connect():
     exit()
 
 
-sim_runner = runner.Runner(ONT_DIR, ONTOLOGY_NAMES, sim_yaml_path, api_client, 10, 0)
-sim_runner.build_ontology_hierarchy()
+sim_runner = runner.Runner(sim_yaml_path, api_client, 10, 0)
+sim_runner.build_ontology_hierarchy(ONT_DIR, ONTOLOGY_NAMES, "ontology_obj.pkl")
+#sim_runner.save_ontology_hierarchy("ontology_obj.pkl")
 
 
 sim_runner.run_simulation_loop()

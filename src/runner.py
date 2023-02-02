@@ -7,7 +7,7 @@ import time
 
 class Runner:
     nanos_to_sec = (10 ** -9)
-    def __init__(self, path_to_ont, ont_names, path_to_yaml, api_client, frequency, verbosity):
+    def __init__(self, path_to_yaml, api_client, frequency, verbosity):
         self.sim_env_dict = {}
         self.runner_stats_dict = {}
         self.client = api_client
@@ -19,11 +19,9 @@ class Runner:
         self.current_task = 1000
         self.task_completion_dict = {} # contains key:task value:[bool started, bool completed]
 
-        Runner.extract_yaml_objs(self, path_to_yaml)
+        Runner.extract_yaml_objs(self, path_to_yaml) # For environment
         
-        onto_domain, onto_task = ontology_utils.load_ontologies(path_to_ont, ont_names[0], ont_names[1]) # Load the ontologies
-        self.onto_domain = onto_domain
-        self.onto_task = onto_task
+
         # cae_log_utils.generate_cae_log_dictionaries() # To generate the inverted ont2cae table
         # task_sequence, action_sequence = ontology_utils.get_task_chain_tasks(onto_task, onto_domain)
         print("Runner Initialized")
@@ -68,8 +66,17 @@ class Runner:
             if current_time_sec > next_iter_time:
                 break
 
-    def build_ontology_hierarchy(self):
-        self.ont_extracted = ontology_utils.build_ontology_hierarchy(self.onto_task)
+    def build_ontology_hierarchy(self, path_to_ont, ont_names, ont_hier_file_path=None):
+        if ont_hier_file_path == None:
+            onto_domain, onto_task = ontology_utils.load_ontologies(path_to_ont, ont_names[0], ont_names[1]) # Load the ontologies
+            self.onto_domain = onto_domain
+            self.onto_task = onto_task
+            self.ont_extracted = ontology_utils.build_ontology_hierarchy(self.onto_task)
+        else:
+            self.ont_extracted = utilities.load_object(ont_hier_file_path)
+
+    def save_ontology_hierarchy(self, filename):
+        utilities.save_object(self.ont_extracted, "ontology_obj.pkl")
 
     def check_task_constraints(self, task):
         # Check constraints
@@ -147,7 +154,7 @@ class Runner:
 
             # ============== Start Runner Work ===============
             Runner.update_environment(self) # Update the environment
-            Runner.perform_ontology_tasks(self) # Perform task actions
+            #Runner.perform_ontology_tasks(self) # Perform task actions
 
 
             # ============== Stop Runner Work ================
