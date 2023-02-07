@@ -127,9 +127,9 @@ Airspeed:
     frequency: 10
     description: ""
 LeftThrustLever:
-    tag: "sim/cockpit2/engine/actuators/throttle_ratio[0]"
+    tag: "sim/cockpit2/engine/actuators/throttle_beta_rev_ratio[0]"
     frequency: 10
-    description: ""
+    description: "sim/cockpit2/engine/actuators/throttle_ratio[0]"
 RightThrustLever:
     tag: "sim/cockpit2/engine/actuators/throttle_ratio[1]"
     frequency: 10

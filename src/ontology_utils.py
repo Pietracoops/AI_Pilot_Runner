@@ -334,8 +334,10 @@ class TaskObj:
         for action, action_obj in self.actions.items():
             action_value = action_obj.exact_value
             action_parameter = action_obj.parameters
-            if environment_dict[action_parameter] == action_value:
+            if float(environment_dict[action_parameter][0]) == action_value:
                 validation_dict[action_parameter] = True
+            else:
+                validation_dict[action_parameter] = False
                 
         for value in validation_dict.values():
             if not value:
@@ -351,11 +353,6 @@ class ConstraintObj:
         self.constr_eval_criteria = {}
         self.task_eval_criteria = {}
 
-class ActionObj:
-    def __init__(self):
-        self.id = None
-        self.type = None
-        self.eval_criteria = {}
 
 class EvalCriteriaObj:
     def __init__(self):

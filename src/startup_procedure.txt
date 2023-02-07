@@ -1,0 +1,4 @@
+1) Bat1 and Bat 2
+2) GPU on from screen display
+3) Bus tie if it is off
+4) External power when it is available

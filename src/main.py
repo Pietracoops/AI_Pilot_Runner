@@ -16,7 +16,7 @@ ONT_DIR = ROOT_DIR / "PilotAI_reference" / "ontologie" / "RDF_XML"
 SIM_API_VER = "v1.0.6"
 SIM_API_NAME = "libXplane-udp-client.exe"
 SUBSCRIPTIONS_NAME = "Subscriptions.yaml"
-ONTOLOGY_NAMES = ["domain.owl", "task.owl"]
+ONTOLOGY_NAMES = ["old_domain.owl", "old_task.owl"]
 
 # seq1 = [1, 2, 3, 4, 5]
 # seq2 = [2, 3, 4, 5, 6]
@@ -47,9 +47,10 @@ if not api_client.connect():
 
 
 sim_runner = runner.Runner(sim_yaml_path, api_client, 10, 0)
-sim_runner.build_ontology_hierarchy(ONT_DIR, ONTOLOGY_NAMES, "ontology_obj.pkl")
+#sim_runner.build_ontology_hierarchy(ONT_DIR, ONTOLOGY_NAMES) # Run this to load ontology from owl files
+sim_runner.build_ontology_hierarchy(ONT_DIR, ONTOLOGY_NAMES, "ontology_obj.pkl") # Run this to load from pickle file (faster)
 #sim_runner.save_ontology_hierarchy("ontology_obj.pkl")
-
+sim_runner.modify_ontology_class()
 
 sim_runner.run_simulation_loop()
 
