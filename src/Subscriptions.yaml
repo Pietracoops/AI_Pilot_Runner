@@ -11,11 +11,11 @@ ipc2:
     frequency: 0
     description: "EMPTY"
 SideStickPositionX:
-    tag: "a320/Panel/SidestickTakeoverL_button"
+    tag: "sim/joystick/yoke_roll_ratio"
     frequency: 10
     description: ""
 SideStickPositionY:
-    tag: "a320/Panel/SidestickTakeoverR_button"
+    tag: "sim/joystick/yoke_pitch_ratio"
     frequency: 10
     description: ""
 Engine1FireSwitch:
@@ -79,9 +79,9 @@ Speed:
     frequency: 10
     description: ""
 VSIIndication:
-    tag: "sim/cockpit/autopilot/vertical_velocity"
+    tag: "sim/flightmodel/position/vh_ind"
     frequency: 10
-    description: ""
+    description: "In m/s, use sim/flightmodel/position/vh_ind_fpm for ft/min"
 RadioAltitude:
     tag: "sim/cockpit2/gauges/indicators/radio_altimeter_height_ft_pilot"
     frequency: 10
@@ -155,6 +155,10 @@ Pitch:
     frequency: 10
     description: ""
 WindShearWarning:
+    tag: "sim/cockpit2/annunciators/windshear_warning"
+    frequency: 10
+    description: ""
+FMAIndication:
     tag: "sim/cockpit2/annunciators/windshear_warning"
     frequency: 10
     description: ""

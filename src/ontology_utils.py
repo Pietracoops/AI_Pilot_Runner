@@ -317,8 +317,7 @@ class TaskObj:
             # Validate all 3 values in value_array [exact value, min, max]
             if value_array[0] != None and float(environment_value[0]) == value_array[0]:
                 validation_dict[name] = True
-                continue
-            elif value_array[1] != None and float(environment_value[0]) >= value_array[1]:
+            if value_array[1] != None and float(environment_value[0]) >= value_array[1]:
                 validation_dict[name] = True
             if value_array[2] != None and float(environment_value[0]) <= value_array[2]:
                 validation_dict[name] = True
@@ -378,7 +377,9 @@ class OntoObj:
         self.forward_condition_task_list = {}  # Contains key:task, value:next task
         self.backward_condition_task_list = {} # Contains key:task, value:precondition task
         self.event_list = {}                   # Contains key:event, value:start task for event chain
-        self.action_exclusion_list = []          
+        self.action_exclusion_list = []      
+        self.key_execution_list = []    
+        self.key_execution_keys_dict = {}
 
         OntoObj.convert_task_constraints_to_preconditions(self)
         OntoObj.decompose_task_list(self)
@@ -386,8 +387,18 @@ class OntoObj:
         OntoObj.create_action_exclusion_list(self)
 
     def create_action_exclusion_list(self):
+        self.action_exclusion_list.append("EmptyAction")
         self.action_exclusion_list.append("VerballyAnnounce")
         self.action_exclusion_list.append("TimeInterval")
+        self.action_exclusion_list.append("FMAIndication")
+
+        # Key Execution list
+        self.key_execution_list.append("BrakeLeft")
+        self.key_execution_keys_dict["BrakeLeft"] = "v"
+        self.key_execution_list.append("BrakeRight")
+        self.key_execution_keys_dict["BrakeRight"] = ""
+        self.key_execution_list.append("LandingGearPosition")
+        self.key_execution_keys_dict["LandingGearPosition"] = "g"
 
     def decompose_task_list(self):
         # Build forward condition task
@@ -567,6 +578,8 @@ def get_task_constraints(task, onto_task):
                     eval_constraint_obj.max_value = constraint.hasMaxValue[0]
                 elif len(constraint.hasMinValue) != 0 and len(constraint.hasMaxValue) == 0:
                     eval_constraint_obj.min_value = constraint.hasMinValue[0]
+                elif len(constraint.hasMinValue) == 0 and len(constraint.hasMaxValue) != 0:
+                    eval_constraint_obj.max_value = constraint.hasMaxValue[0]
                 elif len(constraint.hasExactValue) != 0:
                     eval_constraint_obj.exact_value = constraint.hasExactValue[0]
 
