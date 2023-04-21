@@ -232,6 +232,54 @@ class Runner:
 
 
     def modify_ontology_class(self):
+        # Aircraft Specific Variables
+        V_ROTATIONAL = 125  # Knots
+        V_1 = 120
+
+        # Setting V1 for tasks
+        task_obj = self.ont_extracted.task_list[1027]
+        constr_obj = task_obj.constraints[10017]
+        speed_indication_obj = constr_obj.constr_eval_criteria["Airspeed"]
+        speed_indication_obj.min_value = V_1
+        constr_obj.constr_eval_criteria["Airspeed"] = speed_indication_obj
+        task_obj.constraints[10017] = constr_obj
+        self.ont_extracted.task_list[1027] = task_obj
+
+        task_obj = self.ont_extracted.task_list[1028]
+        constr_obj = task_obj.constraints[10017]
+        speed_indication_obj = constr_obj.constr_eval_criteria["Airspeed"]
+        speed_indication_obj.min_value = V_1
+        constr_obj.constr_eval_criteria["Airspeed"] = speed_indication_obj
+        task_obj.constraints[10017] = constr_obj
+        self.ont_extracted.task_list[1028] = task_obj
+
+
+        # Modify V Rotational to 125 knots
+        task_obj = self.ont_extracted.task_list[1029]
+        constr_obj = task_obj.constraints[10018]
+        speed_indication_obj = constr_obj.constr_eval_criteria["Airspeed"]
+        speed_indication_obj.min_value = V_ROTATIONAL
+        constr_obj.constr_eval_criteria["Airspeed"] = speed_indication_obj
+        task_obj.constraints[10018] = constr_obj
+        self.ont_extracted.task_list[1029] = task_obj
+
+        task_obj = self.ont_extracted.task_list[1030]
+        constr_obj = task_obj.constraints[10018]
+        speed_indication_obj = constr_obj.constr_eval_criteria["Airspeed"]
+        speed_indication_obj.min_value = V_ROTATIONAL
+        constr_obj.constr_eval_criteria["Airspeed"] = speed_indication_obj
+        task_obj.constraints[10018] = constr_obj
+        self.ont_extracted.task_list[1030] = task_obj
+
+        task_obj = self.ont_extracted.task_list[1031]
+        constr_obj = task_obj.constraints[10018]
+        speed_indication_obj = constr_obj.constr_eval_criteria["Airspeed"]
+        speed_indication_obj.min_value = V_ROTATIONAL
+        constr_obj.constr_eval_criteria["Airspeed"] = speed_indication_obj
+        task_obj.constraints[10018] = constr_obj
+        self.ont_extracted.task_list[1031] = task_obj
+
+        # Split the brakes into left and right brake
         brake = self.ont_extracted.task_list[1005]
         rightbrake = ontology_utils.ActionObj()
         rightbrake.id = 100
@@ -262,6 +310,7 @@ class Runner:
         task_obj.constraints[10004] = constr_obj
         self.ont_extracted.task_list[1007] = task_obj
 
+        # Increase VSIIndication from 0.001 to 1.00 because was too small, landing gear wouldnt get deployed
         task_obj = self.ont_extracted.task_list[1034]
         constr_obj = task_obj.constraints[10019]
         vsi_indication_obj = constr_obj.constr_eval_criteria["VSIIndication"]
@@ -271,6 +320,7 @@ class Runner:
         self.ont_extracted.task_list[1034] = task_obj
 
 
+        # Invert the sidestick values because theyre pointing wrong way
         task_obj = self.ont_extracted.task_list[1013]
         action_obj = task_obj.actions[9]
         action_obj.exact_value = -0.5

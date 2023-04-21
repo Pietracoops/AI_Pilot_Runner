@@ -9,9 +9,9 @@ from owlready2 import *
 import src.deviation as deviation
 import win32gui
 
+# Project Specific Variables
 ROOT_DIR = Path(__file__).parent.resolve()
 ONT_DIR = ROOT_DIR / "PilotAI_reference" / "ontologie" / "RDF_XML"
-
 SIM_API_VER = "v1.0.6"
 SIM_API_NAME = "libXplane-udp-client.exe"
 SUBSCRIPTIONS_NAME = "Subscriptions.yaml"
@@ -47,7 +47,7 @@ if not api_client.connect():
     exit()
 
 
-ontology_rebuild = False
+ontology_rebuild = True
 
 sim_runner = runner.Runner(hWnd, sim_yaml_path, api_client, 10, 0)
 if ontology_rebuild == True:
@@ -63,8 +63,8 @@ sim_runner.generate_sequences_from_ontology()
 sim_runner.run_simulation_loop()
 
 
-# while True: # Uncomment this to run the API gui indefinitely
-#     pass
+while True: # Uncomment this to run the API gui indefinitely
+    pass
 
 print("Program Complete.")
 

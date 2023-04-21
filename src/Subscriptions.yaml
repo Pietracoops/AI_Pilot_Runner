@@ -74,10 +74,22 @@ LandingGearLeverPosition:
     tag: "sim/cockpit2/controls/gear_handle_down"
     frequency: 1
     description: ""
-Speed:
-    tag: "sim/flightmodel/position/indicated_airspeed"
+Airspeed:
+    tag: "sim/cockpit2/gauges/indicators/airspeed_kts_pilot"
     frequency: 10
-    description: ""
+    description: "Indicated airspeed in knots, pilot"
+Calibrated_Speed:
+    tag: "sim/cockpit2/gauges/indicators/calibrated_airspeed_kts_pilot"
+    frequency: 10
+    description: "Calibrated airspeed in knots, pilot."
+Ground_Speed:
+    tag: "sim/cockpit2/gauges/indicators/ground_speed_kt"
+    frequency: 10
+    description: "Ground speed in knots, as measured by a GPS based on 2D position. So if you are going straight up or straight down at high speed, this is 0."
+True_Air_Speed:
+    tag: "sim/cockpit2/gauges/indicators/true_airspeed_kts_copilot"
+    frequency: 10
+    description: "True airspeed in knots, for copilot pitot/static, calculated by ADC, requires pitot, static, oat sensor and ADC all to work correctly to give correct value"
 VSIIndication:
     tag: "sim/flightmodel/position/vh_ind"
     frequency: 10
@@ -120,10 +132,6 @@ Engine2Failure:
     description: ""
 LandingGearPosition:
     tag: "sim/aircraft/prop/acf_prop_gear_rat"
-    frequency: 10
-    description: ""
-Airspeed:
-    tag: "sim/flightmodel/position/indicated_airspeed"
     frequency: 10
     description: ""
 LeftThrustLever:
