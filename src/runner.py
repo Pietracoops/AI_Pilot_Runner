@@ -19,12 +19,16 @@ class Runner:
 
         self.start_task = 1000
         self.current_task = 1000
+        self.verbal_announce = ""
         self.task_completion_dict = {} # contains key:task value:[bool started, bool completed]
 
         self.deviation_gravity_dict = {}
         self.deviation_task_dict = {}
         self.deviation_action_executed_sequence = []
         self.ontology_sequences = []
+
+        self.actions_task_mapping_dict = {} # Used to map type of actions to their tasks for quicker searches
+        self.constraints_task_mapping_dict = {} # Used to map type of constrain to their tasks
 
         self.completion_flag = False
 
@@ -97,16 +101,6 @@ class Runner:
         task_obj = self.ont_extracted.task_list[task]
         return task_obj.validate_action_criteria(self.sim_env_dict)
 
-    def cold_and_dark_startup(self):
-        # Push Bat 1
-        # Push Bat 2
-        # When EXT PWR pushbutton shows a green AVAIL text push it
-        pass
-
-    def key_execution(self):
-
-        pass
-
     def execute_task_action(self, current_task):
         task_obj = self.ont_extracted.task_list[current_task]
         task_action_dict = task_obj.actions
@@ -121,6 +115,8 @@ class Runner:
             print(f"Performing Action: {action_parameter} set to {action_value}")
             if action_parameter in self.ont_extracted.action_exclusion_list:
                 # We can't perform these types of actions like "Verbally Announcing takeoff"
+                if action_parameter == "VerballyAnnounce":
+                    self.verbal_announce = action_value # Store the verbal announcement
                 self.task_completion_dict[self.current_task] = [True, True]
                 return_value = False
             else:
@@ -142,7 +138,6 @@ class Runner:
             self.task_completion_dict[self.current_task] = [True, True] # Update task status to started and finished
             return
 
-
         if self.task_completion_dict[self.current_task][1] == True: # Check if current task bool is done
             # Check if completed
             if self.current_task == 1034:
@@ -157,7 +152,7 @@ class Runner:
                     accepted_tasks.append(task)
 
             # Return the one and only task that could be executed next
-            if len(accepted_tasks) > 1:
+            if len(accepted_tasks) > 1: # More than one task can be executed at once
                 print("More than 1 accepted next task - Performing tasks in parallel")
                 for i in range(len(accepted_tasks)):
                     action_executed = Runner.execute_task_action(self, accepted_tasks[i])
@@ -191,6 +186,21 @@ class Runner:
 
 
     def audit_mode(self):
+        
+        pass
+
+    def manage_overruns(self, start_time_sec, end_time_sec):
+        next_iter_time = start_time_sec
+        while next_iter_time < end_time_sec:
+            next_iter_time += self.runner_frequency
+        return next_iter_time
+
+    def model_initialization(self):
+        # Initialize your models here
+        pass
+
+    def run_models(self):
+        # Run your models here
         pass
 
     def run_simulation_loop(self):
@@ -210,6 +220,7 @@ class Runner:
             Runner.update_environment(self) # Update the environment
             Runner.perform_ontology_tasks(self) # Perform task actions
             Runner.audit_mode(self) # Audit the cockpit and perform deviation assessments
+            Runner.run_models(self) # Run 3rd Party Models
 
             if self.completion_flag == True:
                 print("Takeoff Complete! Comencing Runner Termination...")
@@ -222,8 +233,8 @@ class Runner:
 
             if Runner.check_workframe_percentage(self, current_time, start_time_sec, end_time_sec, next_iter_time) > 100.0:
                 print("Overrun Detected!")
-                Runner.display_high_precision_runner_data(self, current_time, start_time_sec, end_time_sec,
-                                                          next_iter_time)
+                next_iter_time = Runner.manage_overruns(self, start_time_sec, end_time_sec)
+                Runner.display_high_precision_runner_data(self, current_time, start_time_sec, end_time_sec, next_iter_time)
             if self.verbosity > 0:
                 Runner.display_high_precision_runner_data(self, current_time, start_time_sec, end_time_sec, next_iter_time)
             Runner.resume_at(self, next_iter_time)
@@ -232,6 +243,9 @@ class Runner:
 
 
     def modify_ontology_class(self):
+
+        print("Patching ontology...", end="")
+
         # Aircraft Specific Variables
         V_ROTATIONAL = 125  # Knots
         V_1 = 120
@@ -252,7 +266,6 @@ class Runner:
         constr_obj.constr_eval_criteria["Airspeed"] = speed_indication_obj
         task_obj.constraints[10017] = constr_obj
         self.ont_extracted.task_list[1028] = task_obj
-
 
         # Modify V Rotational to 125 knots
         task_obj = self.ont_extracted.task_list[1029]
@@ -339,16 +352,32 @@ class Runner:
         task_obj.actions[11] = action_obj
         self.ont_extracted.task_list[1031] = task_obj
 
-        # Generate Deviation dictionaries
-        for task_name, task in self.ont_extracted.task_list.items():
-            action_list_tmp = []
-            for action_name, action in task.actions.items():
-                action_list_tmp.append(f"{task_name}{action_name}")
-            self.deviation_task_dict[str(task_name)] = action_list_tmp
-
         self.ont_extracted.forward_condition_task_list[1020] = [1024, 1025]
         self.ont_extracted.forward_condition_task_list[1026] = [1027]
         self.ont_extracted.forward_condition_task_list[1028] = [1029]
+
+        # Generate Deviation dictionaries
+        constraint_set = set()
+        for task_name, task in self.ont_extracted.task_list.items():
+            action_list_tmp = []
+            tmp_set = set()
+            for action_name, action in task.actions.items():
+                action_list_tmp.append(f"{task_name}{action_name}")
+                tmp_set.add(task_name)
+                if action.parameters in self.actions_task_mapping_dict.keys():
+                    tmp_set = tmp_set.union(self.actions_task_mapping_dict[action.parameters])
+                self.actions_task_mapping_dict[action.parameters] = tmp_set.copy()
+            tmp_set.clear()
+            for constraint_name, constraint in task.constraints.items():
+                tmp_set.add(task_name)
+                for eval in constraint.constr_eval_criteria.keys():
+                    constraint_set.add(eval)
+                if constraint_name in self.constraints_task_mapping_dict.keys():
+                    tmp_set = tmp_set.union(self.constraints_task_mapping_dict[constraint_name])
+                self.constraints_task_mapping_dict[constraint_name] = tmp_set.copy()
+            self.deviation_task_dict[str(task_name)] = action_list_tmp
+
+        print("Complete.")
 
 
 

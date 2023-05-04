@@ -59,6 +59,7 @@ else:
 
 sim_runner.modify_ontology_class()
 sim_runner.generate_sequences_from_ontology()
+sim_runner.model_initialization()
 
 sim_runner.run_simulation_loop()
 

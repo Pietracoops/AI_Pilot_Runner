@@ -1,37 +1,29 @@
 Aircraft_Description:
     tag: "sim/aircraft/view/acf_descrip[0][40]"
     frequency: 10
-    description: "EMPTY"
-ipcl:
-    tag: "ipcl/deviation_model/value1"
-    frequency: 0
-    description: "EMPTY"
-ipc2:
-    tag: "ipcl/deviation_model/value2"
-    frequency: 0
-    description: "EMPTY"
+    description: "Description of Aircraft"
+SideStickPositionX_Read:
+    tag: "a320/Aircraft/Cockpit/Panel/SidestickLatL"
+    frequency: 10
+    description: "Sidestick position X from 0 to 1. Use this label to read value"
+SideStickPositionY_Read:
+    tag: "a320/Aircraft/Cockpit/Panel/SidestickLonL"
+    frequency: 10
+    description: "Sidestick position Y from 0 to 1. Use this label to read value"
 SideStickPositionX:
     tag: "sim/joystick/yoke_roll_ratio"
     frequency: 10
-    description: ""
+    description: "Sidestick position X from 0 to 1. Use this label to modify cockpit"
 SideStickPositionY:
     tag: "sim/joystick/yoke_pitch_ratio"
     frequency: 10
-    description: ""
-Engine1FireSwitch:
-    tag: "a320/Overhead/FireEngine1_button"
-    frequency: 1
-    description: ""
-Engine2FireSwitch:
-    tag: "a320/Overhead/FireEngine2_button"
-    frequency: 1
-    description: ""
+    description: "Sidestick position Y from 0 to 1. Use this label to modify cockpit"
 Engine2MasterSwitchPosition:
-    tag: "a320/Pedestal/EngineMaster2_switch+"
+    tag: "a320/Pedestal/EngineMaster2"
     frequency: 1
     description: ""
 Engine1MasterSwitchPosition:
-    tag: "a320/Pedestal/EngineMaster1_switch+"
+    tag: "a320/Pedestal/EngineMaster1"
     frequency: 1
     description: ""
 EGT:
@@ -39,19 +31,27 @@ EGT:
     frequency: 1
     description: ""
 AutoThrustMode:
-    tag: "a320/Panel/FCU_AutoThrust_button"
+    tag: "a320/Panel/FCU_AutoThrust"
+    frequency: 1
+    description: ""
+FCUAutopilot1:
+    tag: "a320/Panel/FCU_AutoPilot1"
+    frequency: 1
+    description: "Possibly the AutoPilotMasterSwitch"
+FCUAutopilot2:
+    tag: "a320/Panel/FCU_AutoPilot2"
     frequency: 1
     description: ""
 AutoPilotMasterSwitch:
-    tag: "a320/Panel/FCU_AutoPilot1_button"
+    tag: "a320/Panel/FCU_AutoPilot1"
     frequency: 1
     description: ""
 Agent2Switch:
-    tag: "a320/Overhead/FireEngine1_Agent2_button"
+    tag: "a320/Overhead/FireEngine1_Agent2"
     frequency: 1
     description: ""
 Agent1Switch:
-    tag: "a320/Overhead/FireEngine1_Agent1_button"
+    tag: "a320/Overhead/FireEngine1_Agent1"
     frequency: 1
     description: ""
 ParkBrakePosition:
@@ -67,7 +67,7 @@ BrakeLeft:
     frequency: 1
     description: ""
 BrakeRight:
-    tag: "sim/cockpit2/controls/left_brake_ratio"
+    tag: "sim/cockpit2/controls/right_brake_ratio"
     frequency: 1
     description: ""
 LandingGearLeverPosition:
@@ -82,10 +82,6 @@ Calibrated_Speed:
     tag: "sim/cockpit2/gauges/indicators/calibrated_airspeed_kts_pilot"
     frequency: 10
     description: "Calibrated airspeed in knots, pilot."
-Ground_Speed:
-    tag: "sim/cockpit2/gauges/indicators/ground_speed_kt"
-    frequency: 10
-    description: "Ground speed in knots, as measured by a GPS based on 2D position. So if you are going straight up or straight down at high speed, this is 0."
 True_Air_Speed:
     tag: "sim/cockpit2/gauges/indicators/true_airspeed_kts_copilot"
     frequency: 10
@@ -102,14 +98,38 @@ TCASMode:
     tag: "sim/cockpit2/EFIS/EFIS_tcas_on"
     frequency: 10
     description: ""
-trimDirection:
-    tag: "sim/flightmodel2/controls/rudder_trim"
+RudderTrimmerPosition:
+    tag: "a320/Aircraft/Control/Surfaces/Rudder/TrimmerPosition"
+    frequency: 10
+    description: ""
+RudderPosition:
+    tag: "a320/Aircraft/Control/Surfaces/Rudder/Position"
+    frequency: 10
+    description: ""
+PedestalRudderTrimButtonPosition:
+    tag: "a320/Aircraft/Cockpit/Pedestal/RudderTrimm/Position"
+    frequency: 10
+    description: ""
+PedestalRudderTrimResetState:
+    tag: "a320/Aircraft/Cockpit/Pedestal/RudderTrimmReset/State"
     frequency: 10
     description: ""
 MasterSwitchWarningSwitchPress:
     tag: "sim/cockpit/warnings/annunciator_test_pressed"
     frequency: 10
-    description: ""
+    description: "DOUBLE CHECK"
+MasterSwitchAccept:
+    tag: "sim/cockpit/warnings/master_accept"
+    frequency: 10
+    description: "DOUBLE CHECK"
+MasterSwitchCaution:
+    tag: "sim/cockpit/warnings/master_caution"
+    frequency: 10
+    description: "DOUBLE CHECK"
+MasterSwitchWarning:
+    tag: "sim/cockpit/warnings/master_warning"
+    frequency: 10
+    description: "DOUBLE CHECK"
 RadioTransmitting:
     tag: "sim/atc/user_aircraft_transmitting"
     frequency: 10
@@ -120,6 +140,10 @@ TailWind:
     description: ""
 CrossWind:
     tag: "sim/weather/wind_speed_kt[1]"
+    frequency: 10
+    description: ""
+Engine0Failure:
+    tag: "sim/operation/failures/rel_engfai0"
     frequency: 10
     description: ""
 Engine1Failure:
@@ -146,12 +170,28 @@ FMSDirection:
     tag: "sim/cockpit/gyros/psi_ind_degm3"
     frequency: 10
     description: ""
+FMALateral:
+    tag: "a320/Aircraft/FMGS/FMGC1/LateralModeOWN"
+    frequency: 10
+    description: "LOC TRACK=8, LOC CAP=16, GA TRACK=1, NAV=128, HDG=32, TRACK=64"
+FMAVertical:
+    tag: "a320/Aircraft/FMGS/FMGC1/VerticalModeOWN"
+    frequency: 10
+    description: "GS=8, ALT=128, VS=32, FPA=64, SRS=1, CLB=512, DES=1024, FINAL=32768"
 Altitude:
     tag: "sim/flightmodel/misc/h_ind"
     frequency: 10
     description: ""
+FlapLeverPosition:
+    tag: "sim/flightmodel/controls/flaprqst"
+    frequency: 10
+    description: "Float between 0 and 1, Requested flap deployment, 0 = off, 1 = max"
 FlapLever:
-    tag: "sim/multiplayer/controls/flap_request"
+    tag: "a320/Aircraft/Cockpit/Pedestal/FlapsLever"
+    frequency: 10
+    description: ""
+SpoilerLever:
+    tag: "a320/Aircraft/Cockpit/Pedestal/SpoilersLever"
     frequency: 10
     description: ""
 TCASAlert:
@@ -161,12 +201,126 @@ TCASAlert:
 Pitch:
     tag: "sim/cockpit/gyros/the_vac_ind_deg"
     frequency: 10
-    description: ""
+    description: "The indicated pitch on the panel for the first vacuum instrument"
+Heading:
+    tag: "sim/cockpit/gyros/psi_vac_ind_degm"
+    frequency: 10
+    description: "The indicated heading on the panel for the first vacuum instrument"
+Roll:
+    tag: "sim/cockpit/gyros/phi_vac_ind_deg"
+    frequency: 10
+    description: "The indicated roll on the panel for the first vacuum instrument"
 WindShearWarning:
     tag: "sim/cockpit2/annunciators/windshear_warning"
     frequency: 10
     description: ""
-FMAIndication:
-    tag: "sim/cockpit2/annunciators/windshear_warning"
+Engine_0_Failure_Seperation:
+    tag: "sim/operation/failures/rel_engsep0"
     frequency: 10
+    description: "Engine Separation - engine 0"
+Engine_1_Failure_Seperation:
+    tag: "sim/operation/failures/rel_engsep1"
+    frequency: 10
+    description: "Engine Separation - engine 1"
+Engine_0_Failure_Flameout:
+    tag: "sim/operation/failures/rel_engfla0"
+    frequency: 10
+    description: "Engine Failure - engine 0 Flameout"
+Engine_1_Failure_Flameout:
+    tag: "sim/operation/failures/rel_engfla1"
+    frequency: 10
+    description: "Engine Failure - engine 1 Flameout"
+Engine_0_Failure_Fire:
+    tag: "sim/operation/failures/rel_engfir0"
+    frequency: 10
+    description: "Engine Failure - engine 0 Fire"
+Engine_1_Failure_Fire:
+    tag: "sim/operation/failures/rel_engfir1"
+    frequency: 10
+    description: "Engine Failure - engine 1 Fire"
+Engine_0_Failure:
+    tag: "sim/operation/failures/rel_engfai0"
+    frequency: 10
+    description: "Engine Failure - engine 0 loss of power without smoke"
+Engine_1_Failure:
+    tag: "sim/operation/failures/rel_engfai1"
+    frequency: 10
+    description: "Engine Failure - engine 1 loss of power without smoke"
+Engine_L_FailureFire:
+    tag: "a320/Aircraft/PowerPlant/EngineL/FailureFire"
+    frequency: 10
+    description: "Engine_L_FailureFir"
+
+Engine_R_FailureFire:
+    tag: "a320/Aircraft/PowerPlant/EngineR/FailureFire"
+    frequency: 10
+    description: "Engine_R_FailureFire"
+    
+Engine_L_FailureDamage:
+    tag: "a320/Aircraft/PowerPlant/EngineL/FailureDamage"
+    frequency: 10
+    description: "Engine_L_FailureDamage"
+Engine_R_FailureDamage:
+    tag: "a320/Aircraft/PowerPlant/EngineR/FailureDamage"
+    frequency: 10
+    description: "Engine_R_FailureDamage"
+EF1:
+    tag: "a320/Aircraft/PowerPlant/Engine0/FailureFire"
+    frequency: 10
+    description: "EF1"
+EF2:
+    tag: "a320/Aircraft/PowerPlant/Engine1/FailureFire"
+    frequency: 10
+    description: "EF2"
+ED1:
+    tag: "a320/Aircraft/PowerPlant/Engine0/FailureDamage"
+    frequency: 10
+    description: "ED1"
+ED2:
+    tag: "a320/Aircraft/PowerPlant/Engine1/FailureDamage"
+    frequency: 10
+    description: "ED2"
+Eng1Agent1Switch:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireEngine1_Agent1/State"
+    frequency: 10
+    description: ""
+Eng1Agent2Switch:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireEngine1_Agent2/State"
+    frequency: 10
+    description: ""
+Eng1TestSwitch:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireEngine1_Test/State"
+    frequency: 10
+    description: ""
+FireAPUTest:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireAPU_Test/State"
+    frequency: 10
+    description: ""
+FireAPUAgent:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireAPU_Agent/State"
+    frequency: 10
+    description: ""
+Eng2Agent1Switch:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireEngine2_Agent1/State"
+    frequency: 10
+    description: ""
+Eng2Agent2Switch:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireEngine2_Agent2/State"
+    frequency: 10
+    description: ""
+Eng2TestSwitch:
+    tag: "a320/Aircraft/Cockpit/Overhead/FireEngine2_Test/State"
+    frequency: 10
+    description: ""
+Engine1FireSwitch:
+    tag: "a320/Overhead/FireEngine1"
+    frequency: 1
+    description: ""
+Engine2FireSwitch:
+    tag: "a320/Overhead/FireEngine2"
+    frequency: 1
+    description: ""
+APU2FireSwitch:
+    tag: "a320/Overhead/FireAPU"
+    frequency: 1
     description: ""
